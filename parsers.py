@@ -31,11 +31,3 @@ async def fetch_data_statisticstimes():
     df['population'] = df['population'].astype('Int64')
 
     return df[['country', 'region', 'population']]
-
-
-async def test():
-    df = await fetch_data_statisticstimes()
-    print(df.head(10))
-
-
-asyncio.run(test())
