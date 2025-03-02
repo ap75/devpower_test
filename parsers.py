@@ -11,14 +11,35 @@ class PopulationDataFetcher:
         raise NotImplementedError("Цей метод має бути реалізований у дочірньому класі")
 
     async def fetch(self):
-        async with aiohttp.ClientSession() as session:
-            async with session.get(self.url) as response:
-                html_text = await response.text()
-                html_io = StringIO(html_text)
-                df = self._parse(pd.read_html(html_io))
-                df.columns = ['country', 'region', 'population']
-                df['population'] = df['population'].astype('Int64')
-                return df[['country', 'region', 'population']]
+        try:
+            # Запит до URL
+            async with aiohttp.ClientSession() as session:
+                async with session.get(self.url) as response:
+                    response.raise_for_status()  # викликає виключення у разі помилки HTTP
+                    html_text = await response.text()
+
+            # Обробка HTML
+            html_io = StringIO(html_text)
+            tables = pd.read_html(html_io)
+            df = self._parse(tables)
+
+            # Перетворення даних
+            df.columns = ['country', 'region', 'population']
+            df['population'] = df['population'].astype('Int64')
+            return df[['country', 'region', 'population']]
+
+        except aiohttp.ClientError as e:
+            # Обробка мережевих помилок
+            print(f"Помилка під час HTTP запиту: {e}")
+            return None
+        except aiohttp.http_exceptions.HttpProcessingError as e:
+            # Обробка помилок HTTP
+            print(f"Сталася помилка HTTP: {e}")
+            return None
+        except Exception as e:
+            # Обробка інших помилок
+            print(f"Сталася помилка: {e}")
+            return None
 
 
 class WikipediaPopulationDataFetcher(PopulationDataFetcher):
