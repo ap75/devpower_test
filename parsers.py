@@ -1,3 +1,4 @@
+import asyncio
 import requests
 import pandas as pd
 from io import StringIO
@@ -27,7 +28,7 @@ async def fetch_data_statisticstimes():
     tables = pd.read_html(html_io)
 
     df = tables[1]
-    df = df.iloc[:, [0, 8, 3]]
+    df = df.iloc[:-1, [0, 8, 3]]
     df.columns = ['country', 'region', 'population']
 
     df['population'] = df['population'].astype('Int64')
