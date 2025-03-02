@@ -20,7 +20,7 @@ services:
 
   print_data:
     build: .
-    command: python main.py
+    command: python main.py print
     depends_on:
       - db
     env_file:
