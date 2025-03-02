@@ -48,7 +48,7 @@ class WikipediaPopulationDataFetcher(PopulationDataFetcher):
     @staticmethod
     def _parse(html_tables):
         df = html_tables[0]
-        return df.iloc[1:, [0, 4, 2]]
+        return df.iloc[1:-1, [0, 4, 2]]
 
 
 class StatisticsTimesPopulationDataFetcher(PopulationDataFetcher):
