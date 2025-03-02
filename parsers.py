@@ -18,8 +18,24 @@ async def fetch_data_wikipedia():
     return df[['country', 'region', 'population']]
 
 
+async def fetch_data_statisticstimes():
+    url = 'https://statisticstimes.com/demographics/countries-by-population.php'
+
+    response = requests.get(url)
+    tables = pd.read_html(response.text)
+
+    df = tables[1]
+    df = df.iloc[:, [0, 8, 3]]
+    df.columns = ['country', 'region', 'population']
+
+    df['population'] = df['population'].astype('Int64')
+
+    return df[['country', 'region', 'population']]
+
+
 async def test():
-    df = await fetch_data_wikipedia()
+    df = await fetch_data_statisticstimes()
     print(df.head(10))
+
 
 asyncio.run(test())
