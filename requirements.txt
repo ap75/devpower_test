@@ -3,3 +3,4 @@ pandas
 sqlalchemy
 asyncio
 psycopg2-binary
+lxml
