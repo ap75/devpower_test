@@ -1,6 +1,7 @@
+from io import StringIO
+
 import aiohttp
 import pandas as pd
-from io import StringIO
 
 
 class PopulationDataFetcher:
@@ -24,9 +25,9 @@ class PopulationDataFetcher:
             df = self._parse(tables)
 
             # Перетворення даних
-            df.columns = ['country', 'region', 'population']
-            df['population'] = df['population'].astype('Int64')
-            return df[['country', 'region', 'population']]
+            df.columns = ["country", "region", "population"]
+            df["population"] = df["population"].astype("Int64")
+            return df[["country", "region", "population"]]
 
         except aiohttp.ClientError as e:
             # Обробка мережевих помилок
@@ -43,7 +44,7 @@ class PopulationDataFetcher:
 
 
 class WikipediaPopulationDataFetcher(PopulationDataFetcher):
-    url = 'https://en.wikipedia.org/w/index.php?title=List_of_countries_by_population_(United_Nations)&oldid=1215058959'
+    url = "https://en.wikipedia.org/w/index.php?title=List_of_countries_by_population_(United_Nations)&oldid=1215058959"
 
     @staticmethod
     def _parse(html_tables):
@@ -52,7 +53,7 @@ class WikipediaPopulationDataFetcher(PopulationDataFetcher):
 
 
 class StatisticsTimesPopulationDataFetcher(PopulationDataFetcher):
-    url = 'https://statisticstimes.com/demographics/countries-by-population.php'
+    url = "https://statisticstimes.com/demographics/countries-by-population.php"
 
     @staticmethod
     def _parse(html_tables):
